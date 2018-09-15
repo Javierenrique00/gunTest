@@ -1,0 +1,109 @@
+
+
+---crea un nodo
+gun.get("pool1").get("edificio").put({nombre:"El Lote 1"})
+
+---- lo muestra
+gun.get("pool1").get("edificio").once(function(data){console.log(data.nombre)})
+
+--- lo borra
+gun.get("pool1").get("edificio").put(null)
+
+---- lo muestra para ver si está borrado
+gun.get("pool1").get("edificio").once(function(data){console.log(data)})
+
+--------------------------------------
+Todos los nodos hay que ponerlos en una pool base que no sea el root !OJOJO!
+
+//--- crea dos 2 nodos
+var edifMonet = gun.get("pool1").get("edifmonet").put({nombre:"Monet"})
+var edifPicaso = gun.get("pool1").get("edifpicaso").put({nombre:"Picaso"})
+
+//--- Los agrega a un grupo
+gun.get("pool1").get("barrio").set(edifMonet);
+gun.get("pool1").get("barrio").set(edifPicaso);
+gun.get("pool1").get("barrio").set({nombre:"Botero",borrado:true});
+gun.get("pool1").get("barrio").set({nombre:"Velasquez"});
+
+
+//--- muestra los nodos
+gun.get("pool1").get("edifmonet").once(function(data){console.log(data.nombre)})
+gun.get("pool1").get("edifPicaso").once(function(data){console.log(data.nombre)})
+
+
+//--- Muestra los grupos
+gun.get("pool1").get("barrio").map().once(function(data){console.log(data)})
+
+//--- para borarlos del grupo no sirve borrar el nodo de referencia,
+//--- parece que carga uno nuevo siempre
+var edifMonet = gun.get("pool1").get("edifmonet").put(null)
+//-- OJOJOJOJOJO no deja agregar una referencia borrada
+
+//-- no me lo borra ojojojojojo
+gun.get("barrio").unset({nombre:"Botero"});
+
+//--- borrar el grupo completo... Si se puede yuppi
+gun.get("pool1").get("barrio").put(null)
+
+//--- Tratando de borrar con unset
+gun.get("pool1").get("barrio").unset({nombre:"Velasquez"})
+
+-------------------
+Con grupos no me funciona borrar ojojojojojo el grupo
+Si borro un grupo el grupo reaparece completo si le agrego otro dato
+------------------------
+
+Verificar si sepuede encadenar los get con punto ojo
+--------
+gun.get("pool1").get("barrio").get("conjunto").get("apto701").put({propietario:"Javier Ramirez"})
+
+muestra el nodo creado
+----------------
+gun.get("pool1").get("barrio").get("conjunto").get("apto701").once(function(data){console.log(data.propietario)})
+
+No funciona encadenar los gets con punto.
+-----------------------------------
+gun.get("pool1.barrio.conjunto.apto701").once(function(data){console.log(data.propietario)})
+
+Probar los grupos Eliminando un grupo.
+----------------------------------
+
+var painters=gun.get("pool1").get("painters");
+var monet=painters.set({name:"Monet"});
+var picaso=painters.set({name:"Picaso"});
+var rubens=painters.set({name:"Rubens"});
+var botero=painters.set({name:"Botero"});
+
+//----- Checking if it's working
+
+painters.map().once(function(data,key){console.log(data+"-"+key)})
+
+
+//------ para saber que hay mas abajo que la llave name
+painters.map().get("name").once(function(data,key){console.log(data+"-"+key)})
+
+//----para borrar con unset
+painters.unset(rubens);
+
+//---para borrar dentro todo del grupo //---Ojo si funciona, no borra la llave pero si su contenido
+painters.map().once(function(data,key){console.log(data+"-"+key);painters.get(key).put(null)})
+
+//---para borrar dentro todo del grupo para ver si puede borrar la llave
+painters.map().once(function(data,key){console.log(data+"-"+key);painters.unset(data)})
+
+//---borrar todo el grupo completo
+painters.put(null)
+---------------------------------------
+Gun.chain.unset = function(node){
+    if( this && node && node[node_] && node[node_].put && node[node_].put[node_] && node[node_].put[node_][rel_] )
+        this.put( { [node[node_].put[node_][rel_]]:null} );
+    return this;
+}
+---------------------------
+
+//----------A todos los del grupo asignarle un campo offline
+painters.map().once(function(data,key){console.log(data+"-"+key);painters.get(key).put({online:true}) })
+
+//--- A alguien del grupo le pongo false
+gun.get("jly6x38i01aUrKzB9EHzpcG")
+
