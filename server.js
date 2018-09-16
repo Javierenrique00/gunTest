@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const Gun = require("gun");
 
-const port = (process.env.PORT || 8080);
+const port = (process.env.PORT || 443);
 
 if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack');
