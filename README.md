@@ -1,12 +1,9 @@
-# React Boiler
-### A basic boilerplate for React
+# GUNDB performance test
+### Test to know how GunDB receives packets
 
-## Getting started:
+## Two modes :
 ```
-> git clone https://github.com/eddiekollar/ReactSimple.git
-> cd ReactSimple
-> yarn install
-> yarn start
+Ok (Will be updated)...work in progress
 ```
 
 ### What's included?
