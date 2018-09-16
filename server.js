@@ -2,8 +2,9 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const Gun = require("gun");
-
 const port = (process.env.PORT || 8080);
+
+console.log("NODE_ENV="+process.env.NODE_ENV);
 
 if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack');
